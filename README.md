@@ -5,9 +5,8 @@
 > **DualSOM-Dual-mode-software-for-clustering-and-classification-using-self-organising-map** <br>
 > Xin He, Teresa Zielinska, Vibekananda Dutta, Takafumi Matsumaru, Robert Sitnik
  <br>
-> Graduate School of Information, Production, and Systems, Waseda University.
-> Faculty of Power and Aeronautical Engineering, Warsaw University of Technology.
-> Faculty of Mechatronics, Warsaw University of Technology.
+> Waseda University and Warsaw University of Technology.
+
 
 
 This repository provides the official implementation of our dedicated method for **Human Posture Recognition**, which serves as a foundational step for sequence-based human action recognition. 
