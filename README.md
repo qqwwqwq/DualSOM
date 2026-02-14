@@ -16,7 +16,7 @@
 </p>
 
 <p>
-  <a href="https://github.com/qqwwqwq?tab=repositories"><img src="https://img.shields.io/badge/🏠-Project%20Page-4285F4.svg?style=flat"></a>
+  <a href="https://github.com/qqwwqwq?tab=repositories](https://github.com/qqwwqwq/DualSOM"><img src="https://img.shields.io/badge/🏠-Project%20Page-4285F4.svg?style=flat"></a>
   <a href="https://ieeexplore.ieee.org/document/10608412"><img src="https://img.shields.io/badge/📄_IEEE-Paper-b31b1b.svg?style=flat"></a>
   <a href="https://github.com/qqwwqwq/DualSOM/stargazers"><img src="https://img.shields.io/github/stars/qqwwqwq/DualSOM?style=social"></a>
 </p>
