@@ -1,18 +1,18 @@
 <div align="center">
 
-<h1>From Seeing to Recognising: An Extended Self-Organizing Map for Human Postures Identification<br>(RA-L/ICRA 2025)</h1>
+<h2>From Seeing to Recognising: An Extended Self-Organizing Map for Human Postures Identification (RA-L/ICRA 2025)</h2>
 
 <p>
-  <b><a href="https://github.com/qqwwqwq">Xin He</a><sup>1, 2</sup></b>,
-  <b>Teresa Zielinska<sup>2</sup></b>,
-  <b>Vibekananda Dutta<sup>2</sup></b>,
-  <b>Takafumi Matsumaru<sup>1</sup></b>,
+  <b><a href="https://github.com/qqwwqwq">Xin He</a><sup>1, 2</sup></b> \t
+  <b>Teresa Zielinska<sup>2</sup></b> \t
+  <b>Vibekananda Dutta<sup>2</sup></b> \t
+  <b>Takafumi Matsumaru<sup>1</sup></b> \t
   <b>Robert Sitnik<sup>2</sup></b>
 </p>
 
 <p>
-  <sup>1</sup> Waseda University, Japan <br>
-  <sup>2</sup> Warsaw University of Technology, Poland
+  <sup>1</sup>Waseda University, Japan <br>
+  <sup>2</sup>Warsaw University of Technology, Poland
 </p>
 
 <p>
@@ -21,18 +21,10 @@
   <a href="https://github.com/qqwwqwq/DualSOM/stargazers"><img src="https://img.shields.io/github/stars/qqwwqwq/DualSOM?style=social"></a>
 </p>
 
+<hr>
 </div>
 
----
-
-This repository provides the official implementation of **DualSOM**, a dedicated method for **Human Posture Recognition**, which serves as a foundational step for sequence-based human action recognition. 
-
-Our framework introduces an **Extended Self-Organized Map (SOM)** combined with a **Sparse Autoencoder (SAE)**. The SAE effectively reduces data dimensionality while strictly preserving essential spatial characteristics. The latent representations are then processed by our extended SOM, which leverages unlabeled data to accurately classify and cluster human postures.
-
-### ✨ Key Features
-* **Extended SOM Architecture:** Integrates an additional layer specifically designed for post-labeling and clustering.
-* **Task-Oriented Modifications:** Features a custom **angular distance measure** and a specialized **neighborhood function**.
-* **Unsupervised Representation:** Efficiently trains on unlabeled data while maintaining robust discriminative power.
+This repository provides the official implementation of **DualSOM**, a dedicated method for **Human Posture Recognition**, which serves as a foundational step for sequence-based human action recognition. Our framework introduces an **Extended Self-Organized Map (SOM)** combined with a **Sparse Autoencoder (SAE)**. The SAE effectively reduces data dimensionality while strictly preserving essential spatial characteristics. The latent representations are then processed by our extended SOM, which leverages unlabeled data to accurately classify and cluster human postures.
 
 ## 🕸️ Network Architecture
 
