@@ -33,7 +33,7 @@ This repository provides the official implementation of **DualSOM**, a dedicated
 </p>
 
 ## 📧 News
-* **[2025.05.21]** 🔥 Our paper will be presented at the **2025 International Conference on Robotics and Automation (ICRA)**!
+* **[2025.05.21]** 🔥 Our paper is presented at the **2025 International Conference on Robotics and Automation (ICRA)**!
 * **[2024.07.12]** 🎉 Our paper is accepted by **IEEE Robotics and Automation Letters (RA-L)**!
 
 ## 📜 Reference
