@@ -1,33 +1,52 @@
-# [RA-L/ICRA 2025] DualSOM-Dual-mode-software-for-clustering-and-classification-using-self-organising-map
+<div align="center">
 
-[**Project Page**](https://github.com/qqwwqwq?tab=repositories) | [**Paper**](https://ieeexplore.ieee.org/document/10608412) 
+<h1>From Seeing to Recognising: An Extended Self-Organizing Map for Human Postures Identification<br>(RA-L/ICRA 2025)</h1>
 
-> **DualSOM-Dual-mode-software-for-clustering-and-classification-using-self-organising-map** <br>
-> Xin He, Teresa Zielinska, Vibekananda Dutta, Takafumi Matsumaru, Robert Sitnik
- <br>
-> Waseda University and Warsaw University of Technology.
+<p>
+  <b><a href="https://github.com/qqwwqwq">Xin He</a><sup>1, 2</sup></b>,
+  <b>Teresa Zielinska<sup>2</sup></b>,
+  <b>Vibekananda Dutta<sup>2</sup></b>,
+  <b>Takafumi Matsumaru<sup>1</sup></b>,
+  <b>Robert Sitnik<sup>2</sup></b>
+</p>
 
+<p>
+  <sup>1</sup> Waseda University, Japan <br>
+  <sup>2</sup> Warsaw University of Technology, Poland
+</p>
 
+<p>
+  <a href="https://github.com/qqwwqwq?tab=repositories"><img src="https://img.shields.io/badge/🏠-Project%20Page-4285F4.svg?style=flat"></a>
+  <a href="https://ieeexplore.ieee.org/document/10608412"><img src="https://img.shields.io/badge/📄_IEEE-Paper-b31b1b.svg?style=flat"></a>
+  <a href="https://github.com/qqwwqwq/DualSOM/stargazers"><img src="https://img.shields.io/github/stars/qqwwqwq/DualSOM?style=social"></a>
+</p>
 
-This repository provides the official implementation of our dedicated method for **Human Posture Recognition**, which serves as a foundational step for sequence-based human action recognition. 
+</div>
+
+---
+
+This repository provides the official implementation of **DualSOM**, a dedicated method for **Human Posture Recognition**, which serves as a foundational step for sequence-based human action recognition. 
 
 Our framework introduces an **Extended Self-Organized Map (SOM)** combined with a **Sparse Autoencoder (SAE)**. The SAE effectively reduces data dimensionality while strictly preserving essential spatial characteristics. The latent representations are then processed by our extended SOM, which leverages unlabeled data to accurately classify and cluster human postures.
 
-### ✨ Key Features & Contributions
-* **Extended SOM Architecture:** Integrates an additional layer specifically designed for post-labeling and clustering, providing high resolution in distinguishing complex postures.
-* **Task-Oriented Modifications:** Features a custom **angular distance measure** and a specialized **neighborhood function** for weight updates, significantly boosting the SOM's clustering performance.
+### ✨ Key Features
+* **Extended SOM Architecture:** Integrates an additional layer specifically designed for post-labeling and clustering.
+* **Task-Oriented Modifications:** Features a custom **angular distance measure** and a specialized **neighborhood function**.
 * **Unsupervised Representation:** Efficiently trains on unlabeled data while maintaining robust discriminative power.
-* **Proven Superiority:** Achieves better classification efficiency compared to other representative methods, with comprehensive ablation studies validating the impact of our architectural modifications.
 
 ## 🕸️ Network Architecture
-<img src="./assets/overall_structure.png" width="800">
+
+<p align="center">
+  <img src="./assets/overall_structure.png" width="800">
+</p>
 
 ## 📧 News
-* **[2024.07.12]** 🎉 Our paper is accepted by IEEE ROBOTICS AND AUTOMATION LETTERS！
-* **[2025.05.21]** 🔥 Our paper is presented in 2025 International Conference on Robotics and Automation!
+* **[2025.05.21]** 🔥 Our paper will be presented at the **2025 International Conference on Robotics and Automation (ICRA)**!
+* **[2024.07.12]** 🎉 Our paper is accepted by **IEEE Robotics and Automation Letters (RA-L)**!
 
 ## 📜 Reference
 If you find our work useful, please consider citing:
+
 ```bibtex
 @ARTICLE{10608412,
   author={He, Xin and Zielinska, Teresa and Dutta, Vibekananda and Matsumaru, Takafumi and Sitnik, Robert},
@@ -37,5 +56,5 @@ If you find our work useful, please consider citing:
   volume={9},
   number={9},
   pages={7899-7906},
-  keywords={Self-organizing feature maps;Neurons;Training;Decoding;Cameras;Weight measurement;Task analysis;Human postures;improved self-organizing-map;sparse autoencoder;neighbourhood function},
-  doi={10.1109/LRA.2024.3433201}}
+  doi={10.1109/LRA.2024.3433201}
+}
