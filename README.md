@@ -3,10 +3,10 @@
 <h2>From Seeing to Recognising: An Extended Self-Organizing Map for Human Postures Identification (RA-L/ICRA 2025)</h2>
 
 <p>
-  <b><a href="https://github.com/qqwwqwq">Xin He</a><sup>1, 2</sup></b> \t
-  <b>Teresa Zielinska<sup>2</sup></b> \t
-  <b>Vibekananda Dutta<sup>2</sup></b> \t
-  <b>Takafumi Matsumaru<sup>1</sup></b> \t
+  <b><a href="https://github.com/qqwwqwq">Xin He</a><sup>1, 2</sup></b> &nbsp;&nbsp;
+  <b>Teresa Zielinska<sup>2</sup></b> &nbsp;&nbsp;
+  <b>Vibekananda Dutta<sup>2</sup></b> &nbsp;&nbsp;
+  <b>Takafumi Matsumaru<sup>1</sup></b> &nbsp;&nbsp;
   <b>Robert Sitnik<sup>2</sup></b>
 </p>
 
