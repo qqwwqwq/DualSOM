@@ -175,9 +175,9 @@ def load_and_process_data(args):
 
     # 2. Allocate different cache directories based on dataset name
     if dataset_name == 'pku':
-        data_dir = "PKU_DATA"
+        data_dir = "Datas/PKU/Preprocessed_data"
     else:
-        data_dir = "WUT_DATA"
+        data_dir = "Datas/WUT/Preprocessed_data"
 
     # Ensure cache directory exists to prevent errors when saving csv later
     os.makedirs(data_dir, exist_ok=True)
