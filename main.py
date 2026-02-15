@@ -2,6 +2,7 @@ import argparse
 import math
 import os
 import sys
+import pickle # [Added] For saving and loading the SOM model
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -26,7 +27,7 @@ except ImportError as e:
 def get_args():
     parser = argparse.ArgumentParser(description="Human Activity Recognition using Sparse AE + DualSOM")
 
-    # [Added] Dataset selection
+    # Dataset selection
     parser.add_argument('--dataset_name', type=str, default='wut',
                         choices=['wut', 'pku'],
                         help="Select the dataset to use: 'wut' for Warsaw dataset | 'pku' for PKU dataset")
@@ -52,13 +53,14 @@ def get_args():
     parser.add_argument('--som_sigma', type=float, default=4)
     parser.add_argument('--som_lr', type=float, default=0.1)
 
-    # [Modified] Default set to 1: Enable validation calculation during training to plot the accuracy curve
     parser.add_argument('--som_enable_validation', type=int, default=1,
                         help="1: Enable validation during training (default) | 0: Fast mode")
+                        
+    # [Added] Parameter to control SOM loading vs training
+    parser.add_argument('--force_train_som', type=int, default=0,
+                        help="0: Load SOM if exists (default) | 1: Force retrain SOM")
 
-    # ==========================================
-    # [Modified] Default mode changed to 'supervised' (classification validation with labels)
-    # ==========================================
+    # Run mode
     parser.add_argument('--run_mode', type=str, default='supervised',
                         choices=['supervised', 'unsupervised'],
                         help="Run mode: 'supervised' (default, classification with labels) | 'unsupervised' (Algorithm 2 unsupervised clustering from the paper)")
@@ -69,7 +71,7 @@ def get_args():
 
 
 # =====================================================================
-# [New Module] Strictly replicate Algorithm 2 from the paper: K-Means for Regrouping the Neurons
+# Strictly replicate Algorithm 2 from the paper: K-Means for Regrouping the Neurons
 # =====================================================================
 class SOMClusterer:
     def __init__(self, n_clusters, max_iter=100, threshold=1e-4):
@@ -170,7 +172,7 @@ def classify_som(som, data, winmap):
 def load_and_process_data(args):
     print(">>> Loading Data...")
 
-    # 1. Dynamically get dataset name (fallback to 'wut' if not in args)
+    # 1. Dynamically get dataset name
     dataset_name = args.dataset_name.lower()
 
     # 2. Allocate different cache directories based on dataset name
@@ -179,7 +181,6 @@ def load_and_process_data(args):
     else:
         data_dir = "Datas/WUT/Preprocessed_data"
 
-    # Ensure cache directory exists to prevent errors when saving csv later
     os.makedirs(data_dir, exist_ok=True)
 
     train_processed_path = os.path.join(data_dir, "train_data.csv")
@@ -212,7 +213,6 @@ def load_and_process_data(args):
     print(f"Data Loaded. Train shape: {X_train.shape}, Test shape: {X_test.shape}")
     os.makedirs(args.output_dir, exist_ok=True)
 
-    # 3. Dynamically save Ground Truth filename to prevent overwriting between datasets
     np.save(os.path.join(args.output_dir, f"{dataset_name}_gt.npy"), y_test)
 
     return X_train, y_train, X_test, y_test
@@ -220,7 +220,12 @@ def load_and_process_data(args):
 
 def run_autoencoder(X_train, X_test, args):
     print(f">>> Processing Sparse Autoencoder on {args.device}...")
-    save_path = os.path.join('Pretrained_models/autoencoder', f'pretrain_AE_batch_{args.ae_batch_size}.pth')
+    
+    # [Modified] Ensure the AE save directory exists
+    ae_save_dir = os.path.join('Pretrained_models', 'autoencoder')
+    os.makedirs(ae_save_dir, exist_ok=True)
+    save_path = os.path.join(ae_save_dir, f'pretrain_AE_batch_{args.ae_batch_size}.pth')
+    
     model = SparseAutoencoder().to(args.device)
 
     should_train = (args.force_train_ae == 1) or not os.path.exists(save_path)
@@ -232,7 +237,6 @@ def run_autoencoder(X_train, X_test, args):
         print(f"Loading pre-trained model from {save_path}")
         model.load_state_dict(torch.load(save_path, map_location=args.device))
 
-    # Process in batches during feature extraction to prevent OOM
     def extract_features_batched(data_tensor):
         model.eval()
         dataset = TensorDataset(data_tensor)
@@ -264,25 +268,40 @@ def run_som_training_and_eval(X_train, y_train, X_test, y_test, args):
     size = math.ceil(np.sqrt(args.som_size_index * np.sqrt(N)))
     print(f">>> SOM Config: Grid Size={size}x{size}, Max Iter={args.som_epochs * N}, Sigma={args.som_sigma}")
 
-    som = DualSom(size, size, M, sigma=args.som_sigma, learning_rate=args.som_lr,
-                  repulsion=2, neighborhood_function='bubble',
-                  activation_distance='angular')
+    # =======================================================
+    # [Added] Logic for saving and loading the trained SOM
+    # =======================================================
+    som_save_dir = os.path.join('Pretrained_models', 'DualSOM')
+    os.makedirs(som_save_dir, exist_ok=True)
+    som_save_path = os.path.join(som_save_dir, f'trained_som_{args.dataset_name}.pkl')
 
-    som.pca_weights_init(X_train)
+    should_train_som = (args.force_train_som == 1) or not os.path.exists(som_save_path)
 
-    max_iter = args.som_epochs * N
-    if args.som_enable_validation == 1:
-        print("    -> Standard Mode (with periodic validation)...")
-        som.train_batch(X_train, y_train, X_test, y_test, max_iter, verbose=True, enable_validation=True)
+    if not should_train_som:
+        print(f"    -> Loading pre-trained SOM from {som_save_path}...")
+        with open(som_save_path, 'rb') as f:
+            som = pickle.load(f)
     else:
-        print("    -> Fast Mode (Skipping validation)...")
-        som.train_batch(X_train, max_iter, verbose=True, enable_validation=False)
+        som = DualSom(size, size, M, sigma=args.som_sigma, learning_rate=args.som_lr,
+                      repulsion=2, neighborhood_function='bubble',
+                      activation_distance='angular')
 
-    print("\n>>> SOM Training Finished! Executing Evaluation Branch...")
+        som.pca_weights_init(X_train)
 
-    # =======================================================
-    # [Core Addition] Dynamically dispatch tasks based on run_mode
-    # =======================================================
+        max_iter = args.som_epochs * N
+        if args.som_enable_validation == 1:
+            print("    -> Standard Mode (with periodic validation)...")
+            som.train_batch(X_train, y_train, X_test, y_test, max_iter, verbose=True, enable_validation=True)
+        else:
+            print("    -> Fast Mode (Skipping validation)...")
+            som.train_batch(X_train, max_iter, verbose=True, enable_validation=False)
+            
+        print(f"\n    -> Saving trained SOM to {som_save_path}...")
+        with open(som_save_path, 'wb') as f:
+            pickle.dump(som, f)
+
+    print("\n>>> SOM Training/Loading Finished! Executing Evaluation Branch...")
+
     if args.run_mode == 'supervised':
         print("\n=== Branch: Supervised Classification ===")
         winmap = som.labels_map(X_train, y_train)
@@ -291,7 +310,6 @@ def run_som_training_and_eval(X_train, y_train, X_test, y_test, args):
         print("\nClassification Report:")
         print(classification_report(y_test, np.array(y_pred)))
 
-        # Calculate all supervised classification metrics
         metrics_dict = {
             "accuracy": accuracy_score(y_test, y_pred),
             "precision_macro": precision_score(y_test, y_pred, average='macro', zero_division=0),
@@ -311,8 +329,6 @@ def run_som_training_and_eval(X_train, y_train, X_test, y_test, args):
         print("    -> Predicting test set clusters...")
         y_pred = clusterer.predict(som, X_test)
 
-        # In unsupervised mode, true class IDs and cluster IDs may not align, so Accuracy is not calculated
-        # Instead, we calculate external clustering metrics invariant to permutation (NMI, AMI, Homogeneity, Completeness)
         metrics_dict = {
             "nmi": metrics.normalized_mutual_info_score(y_test, y_pred, average_method='arithmetic'),
             "ami": metrics.adjusted_mutual_info_score(y_test, y_pred, average_method='arithmetic'),
@@ -320,12 +336,10 @@ def run_som_training_and_eval(X_train, y_train, X_test, y_test, args):
             "completeness": metrics.completeness_score(y_test, y_pred)
         }
 
-    # Print the corresponding metrics
     print("\n" + "=" * 30 + "\nMetrics Summary\n" + "=" * 30)
     for k, v in metrics_dict.items():
         print(f"{k.capitalize()}: {v:.4f}")
 
-    # [Modified] Dynamically save prediction filename with dataset name suffix
     np.save(os.path.join(args.output_dir, f"{args.dataset_name}_pred_{args.run_mode}.npy"), y_pred)
     visualize_results(X_test, y_test, y_pred, som, args)
 
@@ -384,7 +398,6 @@ def visualize_results(X_test, y_test, y_pred, som, args):
         plt.text(0.5, 0.5, "Fast Mode\n(No Accuracy Curve)", ha='center', va='center')
 
     os.makedirs(args.output_dir, exist_ok=True)
-    # [Modified] Dynamically save visualization image filename
     save_path = os.path.join(args.output_dir, f'visualization_{args.dataset_name}_{args.run_mode}.png')
     plt.savefig(save_path)
     plt.close()
