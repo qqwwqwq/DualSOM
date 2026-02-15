@@ -220,7 +220,7 @@ def load_and_process_data(args):
 
 def run_autoencoder(X_train, X_test, args):
     print(f">>> Processing Sparse Autoencoder on {args.device}...")
-    save_path = os.path.join('weight', f'pretrain_AE_batch_{args.ae_batch_size}_2026_71.69.pth')
+    save_path = os.path.join('Pretrained_models/autoencoder', f'pretrain_AE_batch_{args.ae_batch_size}.pth')
     model = SparseAutoencoder().to(args.device)
 
     should_train = (args.force_train_ae == 1) or not os.path.exists(save_path)
