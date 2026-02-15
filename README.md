@@ -33,6 +33,12 @@ This repository provides the official implementation of **DualSOM**, a dedicated
   <img src="./assets/overall_structure.png" width="800">
 </p>
 
+## 📊 Qualitative Results
+
+<p align="center">
+  <img src="./assets/Comparison examples.png" width="800">
+</p>
+
 ## 📂 Data Preparation
 
 ### Supported Datasets
