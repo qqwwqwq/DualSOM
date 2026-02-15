@@ -110,16 +110,33 @@ python main.py --som_enable_validation 1
 python main.py --som_enable_validation 0
 ```
 
-### 3. Hyperparameter Configuration
+### 3. Checkpointing & Auto-Loading
 
-You can easily adjust the network architectures and training parameters via the command line.
+To prevent redundant and time-consuming training, our framework automatically saves the trained models into the `Pretrained_models/` directory. By default, if the script detects existing weights, it will **instantly load them** and skip the training phase.
+
+You can explicitly control this behavior using the force-train flags:
+```bash
+# Instant Evaluation: Load existing AE and SOM, jump straight to testing
+python main.py --force_train_ae 0 --force_train_som 0
+
+# Force Retrain: Ignore existing checkpoints and train both models from scratch
+python main.py --force_train_ae 1 --force_train_som 1
+```
+
+### 4. Hyperparameter Configuration
+
+You can easily adjust the dataset, network architectures, and training parameters via the command line.
+
+**Dataset Selection:**
+```bash
+python main.py --dataset_name pku  # Options: 'wut' or 'pku'
+```
 
 **Sparse Autoencoder (SAE) Settings:**
 ```bash
 python main.py \
     --ae_epochs 150 \
-    --ae_batch_size 32 \
-    --force_train_ae 0  # Set to 1 to force retrain, 0 to load existing weights
+    --ae_batch_size 32
 ```
 
 **Extended SOM Settings:**
@@ -131,10 +148,16 @@ python main.py \
     --som_lr 0.1
 ```
 
-### 🎯 Quick Start Example
-To run the full unsupervised pipeline at maximum speed with 8 desired clusters:
+### 🎯 Quick Start Examples
+
+**Scenario 1:** Train from scratch on the PKU dataset at maximum speed, then run unsupervised clustering (8 clusters).
 ```bash
-python main.py --run_mode unsupervised --n_clusters 8 --som_enable_validation 0
+python main.py --dataset_name pku --force_train_ae 1 --force_train_som 1 --som_enable_validation 0 --run_mode unsupervised --n_clusters 8
+```
+
+**Scenario 2:** Tweak the number of clusters to 10 and re-evaluate instantly using the auto-loaded model (no retraining needed!).
+```bash
+python main.py --dataset_name pku --force_train_som 0 --run_mode unsupervised --n_clusters 10
 ```
 
 ## 📧 News
