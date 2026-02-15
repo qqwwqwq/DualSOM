@@ -32,6 +32,51 @@ This repository provides the official implementation of **DualSOM**, a dedicated
   <img src="./assets/overall_structure.png" width="800">
 </p>
 
+## 📂 Data Preparation
+
+### Supported Datasets
+Our framework currently supports and has been heavily evaluated on two skeleton-based human posture datasets:
+* **WUT** (Warsaw University of Technology Dataset)
+* **PKU-MMD** (Peking University Dataset)
+
+### 1. Download Datasets
+* **WUT Dataset**: Download the skeleton-only dataset from [https://drive.google.com/file/d/19IMwA_N7HC-RfstoInZxLx8BF5Lge99q/view?usp=sharing](#).
+* **PKU Dataset**: Download the skeleton-only dataset from [https://drive.google.com/file/d/19ATaTph3IBtfdKRzLkro9Es1wPW7aCf6/view?usp=sharing](#).
+
+### 2. Directory Structure
+After downloading and extracting, please put the raw data into the following directory structure before training:
+
+```text
+DualSOM/
+├── Datas/
+│   ├── WUT/
+│   │   ├── WUT_data_train/  # Training csv files
+│   │   ├── WUT_data_test/  # Testing cvs files
+│   │   └── Preprocessed_data/   # Preprocessed data which can be directly used
+│   └── PKU/
+│   │   ├── PKU_data_train/  # Training csv files
+│   │   ├── PKU_data_test/  # Testing cvs files
+│   │   └── Preprocessed_data/   # Preprocessed data which can be directly used
+├── Daulmap.py
+├── sparse_autoencoder.py
+├── main.py
+└── ...
+```
+
+### 3. Data Processing
+You don't need to manually preprocess the skeleton coordinates or labels. The `preprocessing.py` script automatically handles the entire pipeline:
+1. **Raw Data Merging:** Scans and merges all raw `.csv` files from the specified folder.
+2. **Feature Cleaning:** Automatically imputes missing values and performs **L2 Normalization** on the feature vectors.
+3. **Label Encoding:** Dynamically maps the raw string labels to numeric IDs based on the provided `--dataset_name` (`wut` or `pku`).
+4. **Smart Caching:** Saves the cleaned data into `.csv` files under auto-generated `/Datas/WUT/Preprocessed_data/` or `/Datas/PKU/Preprocessed_data/` directories. **On subsequent runs, the script will automatically detect and instantly load these cached files instead of reprocessing the raw data, drastically speeding up the execution.**
+
+To point the code to your specific data paths, simply use the `--train_path` and `--test_path` arguments:
+```bash
+# Example: Process and train on the PKU dataset
+python main.py --dataset_name wut \
+    --train_path ./Datas/WUT/WUT_data_train/ \
+    --test_path ./Datas/WUT/WUT_data_test/
+
 ## 🚀 Training and Evaluation
 
 You can execute the entire pipeline (Data Loading $\rightarrow$ Sparse Autoencoder $\rightarrow$ DualSOM) using `main.py`. The framework offers a high degree of flexibility through command-line arguments.
