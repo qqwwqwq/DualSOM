@@ -57,7 +57,7 @@ DualSOM/
 │   │   ├── PKU_data_train/  # Training csv files
 │   │   ├── PKU_data_test/  # Testing cvs files
 │   │   └── Preprocessed_data/   # Preprocessed data which can be directly used
-├── Daulmap.py
+├── DaulSOM.py
 ├── sparse_autoencoder.py
 ├── main.py
 └── ...
