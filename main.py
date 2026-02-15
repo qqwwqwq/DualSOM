@@ -15,7 +15,7 @@ import torch
 from torch.utils.data import DataLoader, TensorDataset
 
 try:
-    from Daulmap import DualSom
+    from DaulSOM import DualSom
     from preprocessing import get_dataset
     from sparse_autoencoder import SparseAutoencoder, fit
 except ImportError as e:
