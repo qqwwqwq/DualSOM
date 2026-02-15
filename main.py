@@ -33,9 +33,9 @@ def get_args():
 
     # Path parameters
     parser.add_argument('--train_path', type=str,
-                        default="/mnt/storage/buildwin/Project/Human activity/datas/datas/WUT_data_train/")
+                        default="/Datas/WUT/WUT_data_train/")
     parser.add_argument('--test_path', type=str,
-                        default="/mnt/storage/buildwin/Project/Human activity/datas/datas/WUT_data_test/")
+                        default="/Datas/WUT/WUT_data_test/")
     parser.add_argument('--output_dir', type=str, default="./results")
     parser.add_argument('--reduction_factor', type=int, default=1)
 
