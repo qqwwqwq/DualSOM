@@ -174,7 +174,7 @@ class DualSom(object):
         denum = multiply(linalg.norm(w, axis=2), linalg.norm(x))
         res = num / (denum + 1e-8)
 
-        # 严格限制数值在 [-1.0, 1.0] 范围内，防止出现 NaN
+        # Strictly limit the values to the range [-1.0, 1.0] to prevent NaN occurrences
         res = np.clip(res, -1.0, 1.0)
 
         i = np.arccos(res)
@@ -234,23 +234,23 @@ class DualSom(object):
                 self._weights[i, j] = c1 * pc[:, pc_order[0]] + \
                                       c2 * pc[:, pc_order[1]]
 
-    # [核心修改点] 使用 *args 动态接管参数，支持可选的测试集
+    # [Core modification point] Use *args to dynamically take over parameters, supporting optional test sets
     def train(self, data, *args, random_order=False, verbose=False, use_epochs=False, enable_validation=True):
         """Trains the SOM. Supports both complete and minimal arguments."""
 
-        # 魔法解析：根据传入的参数数量，智能判断是否传入了标签和测试集
+        # Magic parsing: Intelligently determine if labels and test sets were passed based on the number of arguments
         if len(args) == 1:
-            # 极简模式：只传了 (data, num_iteration)
+            # Minimalist mode: Only (data, num_iteration) was passed
             Y_train, X_test, Y_test = None, None, None
             num_iteration = args[0]
         elif len(args) == 4:
-            # 兼容模式：传入了 (data, Y_train, X_test, Y_test, num_iteration)
+            # Compatibility mode: (data, Y_train, X_test, Y_test, num_iteration) was passed
             Y_train, X_test, Y_test, num_iteration = args
         else:
             raise ValueError(
                 "Invalid arguments. Use train(data, num_iteration) OR train(data, Y_train, X_test, Y_test, num_iteration)")
 
-        # 安全拦截：如果开启了验证，但并没有传测试集数据，自动关闭验证防崩溃
+        # Security intercept: If validation is enabled but test set data is not passed, automatically disable validation to prevent crashes
         if enable_validation and (Y_train is None or X_test is None or Y_test is None):
             enable_validation = False
 
@@ -259,7 +259,7 @@ class DualSom(object):
             if not winmap:
                 return 0.0
 
-            # 移除 numpy.sum，使用 Python 内置 sum 并初始化空 Counter
+            # Remove numpy.sum, use Python built-in sum and initialize empty Counter
             default_class = sum(winmap.values(), Counter()).most_common()[0][0]
 
             result = []
@@ -295,7 +295,7 @@ class DualSom(object):
                 print("epoch", idy)
                 idy += 1
             if t == idx * len(data) * 5:
-                # 仅在开启验证时执行测试集指标计算
+                # Only execute test set metric calculation when validation is enabled
                 if enable_validation:
                     acc = round(valid_accuracy() * 100, 2)
                     self.acuracy.append(acc)
@@ -312,7 +312,7 @@ class DualSom(object):
             self.it.append(idx)
             print(idx)
 
-    # [核心修改点] 配合 train 使用 *args 传递，保持签名极度简洁
+    # [Core modification point] Use *args to pass parameters in conjunction with train, keeping the signature extremely concise
     def train_batch(self, data, *args, verbose=False, enable_validation=True):
         """Trains the SOM using all the vectors in data sequentially."""
         self.train(data, *args, random_order=False, verbose=verbose, enable_validation=enable_validation)
