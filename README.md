@@ -5,7 +5,7 @@
 <p>
   <b><a href="https://github.com/qqwwqwq">Xin He</a><sup>1, 2</sup></b> &nbsp;&nbsp;
   <b>Teresa Zielinska<sup>2</sup></b> &nbsp;&nbsp;
-  <b>Vibekananda Dutta<sup>2</sup></b> &nbsp;&nbsp;
+  <b><a href="https://github.com/Vibek">Vibekananda Dutta<sup>2</sup></b> &nbsp;&nbsp;
   <b>Takafumi Matsumaru<sup>1</sup></b> &nbsp;&nbsp;
   <b>Robert Sitnik<sup>2</sup></b>
 </p>
